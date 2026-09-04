@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+<title>Sudoku Seru — Main &amp; Kumpulkan Poin!</title>
+<meta name="description" content="Sudoku Seru — game sudoku mobile dengan tantangan harian, level, dan lencana.">
+<meta name="theme-color" content="#171b36">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sudoku Seru">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="table-glow"></div>
+
+<div class="phone" id="phone">
+  <div class="app" id="app" data-theme="reef">
+
+    <!-- ===== APP BAR ===== -->
+    <header class="appbar">
+      <div class="appbar-left" id="appbar-profile">
+        <div class="level-badge">
+          <svg viewBox="0 0 36 36" class="level-ring">
+            <circle cx="18" cy="18" r="15.5" class="ring-track"></circle>
+            <circle cx="18" cy="18" r="15.5" class="ring-fill" id="xp-ring"></circle>
+          </svg>
+          <span id="hb-level">1</span>
+        </div>
+        <div class="appbar-text">
+          <p class="appbar-title">Sudoku Seru</p>
+          <p class="appbar-sub"><span id="hb-xp">0</span>/<span id="hb-xp-next">100</span> XP</p>
+        </div>
+      </div>
+      <div class="appbar-right">
+        <button class="icon-btn" id="sound-toggle" title="Suara">🔊</button>
+      </div>
+    </header>
+
+    <!-- ===== VIEWS ===== -->
+    <main class="views" id="views">
+
+      <!-- ---------- HOME / PLAY VIEW ---------- -->
+      <section class="view" id="view-home" data-view="home">
+
+        <button class="daily-card" id="daily-card">
+          <div class="daily-glow"></div>
+          <div class="daily-left">
+            <span class="daily-flame" id="daily-flame">🔥</span>
+            <div>
+              <p class="daily-title">Tantangan Harian</p>
+              <p class="daily-sub" id="daily-sub">Runtutan <span id="daily-streak">0</span> hari</p>
+            </div>
+          </div>
+          <span class="daily-cta" id="daily-cta">Main</span>
+        </button>
+
+        <nav class="level-tabs" role="tablist" aria-label="Mode permainan">
+          <button class="level-tab active" data-level="easy" role="tab">Mudah</button>
+          <button class="level-tab" data-level="medium" role="tab">Sedang</button>
+          <button class="level-tab" data-level="hard" role="tab">Sulit</button>
+          <button class="level-tab zen-tab" data-level="zen" role="tab">🌿 Zen</button>
+        </nav>
+
+        <div class="stats-strip">
+          <div class="stat" title="Waktu bermain">
+            <span class="stat-icon">⏱</span>
+            <span class="stat-value" id="timer">00:00</span>
+          </div>
+          <div class="stat" title="Poin kamu">
+            <span class="stat-icon">★</span>
+            <span class="stat-value" id="score">0</span>
+          </div>
+          <div class="stat" id="streak-stat" title="Runtutan benar">
+            <span class="stat-icon flame">🔥</span>
+            <span class="stat-value" id="streak">0</span>
+          </div>
+          <div class="stat" title="Kesalahan">
+            <span class="stat-icon">✕</span>
+            <span class="stat-value"><span id="mistakes">0</span>/<span id="max-mistakes">3</span></span>
+          </div>
+          <div class="stat best-stat" title="Rekor">
+            <span class="stat-icon">🏆</span>
+            <span class="stat-value" id="best-score">0</span>
+          </div>
+        </div>
+
+        <div class="board-wrap">
+          <div class="board-frame">
+            <div class="board" id="board" aria-label="Papan Sudoku"></div>
+            <div class="board-overlay" id="board-overlay">
+              <div class="overlay-card">
+                <p class="overlay-title" id="overlay-title">Jeda</p>
+                <p class="overlay-sub" id="overlay-sub">Ketuk lanjutkan untuk main lagi</p>
+                <button class="btn btn-primary" id="overlay-resume">Lanjutkan</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="board-actions">
+            <button class="pill-btn" id="btn-undo">
+              <span class="pill-icon">↶</span><span>Undo</span>
+            </button>
+            <button class="pill-btn" id="btn-erase">
+              <span class="pill-icon">⌫</span><span>Hapus</span>
+            </button>
+            <button class="pill-btn" id="btn-pencil">
+              <span class="pill-icon">✎</span><span>Pensil</span>
+            </button>
+            <button class="pill-btn" id="btn-hint">
+              <span class="pill-icon">💡</span><span>Bantuan</span>
+              <span class="pill-badge" id="hint-count">3</span>
+            </button>
+            <button class="pill-btn" id="btn-pause">
+              <span class="pill-icon">⏸</span><span>Jeda</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="numpad" id="numpad" aria-label="Papan angka">
+          <button class="num-tile" data-num="1">1</button>
+          <button class="num-tile" data-num="2">2</button>
+          <button class="num-tile" data-num="3">3</button>
+          <button class="num-tile" data-num="4">4</button>
+          <button class="num-tile" data-num="5">5</button>
+          <button class="num-tile" data-num="6">6</button>
+          <button class="num-tile" data-num="7">7</button>
+          <button class="num-tile" data-num="8">8</button>
+          <button class="num-tile" data-num="9">9</button>
+        </div>
+
+        <button class="btn btn-primary btn-block" id="btn-new-game">✨ Papan Baru</button>
+
+        <details class="info-card">
+          <summary>Cara Main</summary>
+          <ul>
+            <li>Pilih kotak, lalu ketuk angka.</li>
+            <li>Setiap angka 1–9 hanya boleh muncul sekali di tiap baris, kolom, dan kotak 3×3.</li>
+            <li>Mode pensil untuk mencatat kemungkinan angka.</li>
+            <li>Isi benar = poin &amp; XP. Runtutan benar = bonus api 🔥</li>
+            <li>Mode Zen: tanpa batas kesalahan, santai tanpa tekanan.</li>
+          </ul>
+        </details>
+      </section>
+
+      <!-- ---------- STATS VIEW ---------- -->
+      <section class="view" id="view-stats" data-view="stats" hidden>
+        <div class="profile-card">
+          <div class="profile-ring">
+            <svg viewBox="0 0 64 64">
+              <circle cx="32" cy="32" r="28" class="ring-track"></circle>
+              <circle cx="32" cy="32" r="28" class="ring-fill" id="xp-ring-big"></circle>
+            </svg>
+            <span id="profile-level">1</span>
+          </div>
+          <div>
+            <p class="profile-name">Level <span id="profile-level-2">1</span></p>
+            <p class="profile-xp"><span id="profile-xp">0</span> / <span id="profile-xp-next">100</span> XP menuju level berikutnya</p>
+          </div>
+        </div>
+
+        <h2 class="section-title">Ringkasan</h2>
+        <div class="stat-grid">
+          <div class="stat-tile"><span class="tile-num" id="st-played">0</span><span class="tile-label">Total Main</span></div>
+          <div class="stat-tile"><span class="tile-num" id="st-won">0</span><span class="tile-label">Menang</span></div>
+          <div class="stat-tile"><span class="tile-num" id="st-winrate">0%</span><span class="tile-label">Win Rate</span></div>
+          <div class="stat-tile"><span class="tile-num" id="st-score">0</span><span class="tile-label">Skor Total</span></div>
+          <div class="stat-tile"><span class="tile-num" id="st-longstreak">0</span><span class="tile-label">Runtutan Terpanjang</span></div>
+          <div class="stat-tile"><span class="tile-num" id="st-dailystreak">0</span><span class="tile-label">Streak Harian</span></div>
+        </div>
+
+        <h2 class="section-title">Rekor per Tingkat</h2>
+        <div class="record-list" id="record-list"><!-- filled by JS --></div>
+      </section>
+
+      <!-- ---------- ACHIEVEMENTS VIEW ---------- -->
+      <section class="view" id="view-achievements" data-view="achievements" hidden>
+        <h2 class="section-title">Lencana</h2>
+        <p class="section-sub" id="badge-progress-text">0 dari 0 lencana terkumpul</p>
+        <div class="badge-grid" id="badge-grid"><!-- filled by JS --></div>
+      </section>
+
+      <!-- ---------- SETTINGS VIEW ---------- -->
+      <section class="view" id="view-settings" data-view="settings" hidden>
+        <h2 class="section-title">Tema</h2>
+        <div class="theme-row" id="theme-row"><!-- filled by JS --></div>
+
+        <h2 class="section-title">Preferensi</h2>
+        <div class="setting-list">
+          <label class="setting-row">
+            <span>Efek suara</span>
+            <span class="switch"><input type="checkbox" id="set-sound" checked><span class="switch-track"></span></span>
+          </label>
+          <label class="setting-row">
+            <span>Getar (haptic)</span>
+            <span class="switch"><input type="checkbox" id="set-haptics" checked><span class="switch-track"></span></span>
+          </label>
+          <label class="setting-row">
+            <span>Sorot angka yang sama</span>
+            <span class="switch"><input type="checkbox" id="set-highlight" checked><span class="switch-track"></span></span>
+          </label>
+          <label class="setting-row">
+            <span>Hapus catatan otomatis</span>
+            <span class="switch"><input type="checkbox" id="set-autonotes" checked><span class="switch-track"></span></span>
+          </label>
+        </div>
+
+        <h2 class="section-title">Data</h2>
+        <button class="btn btn-ghost btn-block" id="btn-share-app">📤 Bagikan hasil terakhir</button>
+        <button class="btn btn-danger btn-block" id="btn-reset-progress">Reset Progres</button>
+        <p class="version-tag">Sudoku Seru · v2.0 Mobile</p>
+      </section>
+
+    </main>
+
+    <!-- ===== BOTTOM TAB BAR ===== -->
+    <nav class="tabbar" id="tabbar">
+      <button class="tab-btn active" data-view="home">
+        <span class="tab-icon">🧩</span><span class="tab-label">Main</span>
+      </button>
+      <button class="tab-btn" data-view="stats">
+        <span class="tab-icon">📊</span><span class="tab-label">Statistik</span>
+      </button>
+      <button class="tab-btn" data-view="achievements">
+        <span class="tab-icon">🏆</span><span class="tab-label">Lencana</span>
+        <span class="tab-dot" id="badge-dot" hidden></span>
+      </button>
+      <button class="tab-btn" data-view="settings">
+        <span class="tab-icon">⚙️</span><span class="tab-label">Atur</span>
+      </button>
+    </nav>
+
+  </div>
+</div>
+
+<!-- ===== WIN MODAL ===== -->
+<div class="modal" id="win-modal">
+  <div class="modal-card">
+    <div class="confetti-canvas-wrap">
+      <canvas id="confetti-canvas"></canvas>
+    </div>
+    <p class="modal-eyebrow">Papan Selesai!</p>
+    <h2 id="win-title">Kerja Bagus! 🎉</h2>
+    <div class="modal-stats">
+      <div><span id="win-time">00:00</span><small>Waktu</small></div>
+      <div><span id="win-score">0</span><small>Poin</small></div>
+      <div><span id="win-bonus">0</span><small>Bonus</small></div>
+      <div><span id="win-xp">0</span><small>XP</small></div>
+    </div>
+    <p class="modal-note" id="win-note"></p>
+    <div class="modal-buttons">
+      <button class="btn btn-ghost" id="win-share">📤 Bagikan</button>
+      <button class="btn btn-ghost" id="win-close">Tutup</button>
+      <button class="btn btn-primary" id="win-next">Main Lagi</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== GAME OVER MODAL ===== -->
+<div class="modal" id="over-modal">
+  <div class="modal-card">
+    <p class="modal-eyebrow">Yah…</p>
+    <h2>Kesalahan Sudah 3! 😵</h2>
+    <p class="modal-note">Jangan menyerah, coba papan baru dan raih rekor barumu.</p>
+    <div class="modal-buttons">
+      <button class="btn btn-ghost" id="over-close">Tutup</button>
+      <button class="btn btn-primary" id="over-retry">Papan Baru</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ACHIEVEMENT UNLOCK TOAST ===== -->
+<div class="badge-toast" id="badge-toast">
+  <span class="badge-toast-icon" id="badge-toast-icon">🏆</span>
+  <div>
+    <p class="badge-toast-eyebrow">Lencana Baru!</p>
+    <p class="badge-toast-title" id="badge-toast-title">—</p>
+  </div>
+</div>
+
+<!-- ===== GENERATING TOAST ===== -->
+<div class="toast" id="gen-toast">Menyusun papan sudoku…</div>
+
+<script src="script.js"></script>
+</body>
+</html>
