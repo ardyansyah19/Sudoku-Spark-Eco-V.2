@@ -13,6 +13,14 @@
   --shadow-card: 0 14px 34px rgba(8, 10, 30, 0.45);
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+     --shadow-card: 0 14px 34px rgba(8, 10, 30, 0.45);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+     --shadow-card: 0 14px 34px rgba(8, 10, 30, 0.45);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 /* Default theme: Reef (coral / teal / gold on deep navy) */
